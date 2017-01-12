@@ -1,0 +1,184 @@
+﻿@using Payroll.Domain.Entities
+@model List<TimeSheetItem>
+@{
+    ViewBag.Title = "Create";
+    ViewBag.ViewHeader = "Time Sheets";
+    ViewBag.Description = "Daily Records";
+    ViewBag.Controller = "Time Sheets";
+    ViewBag.Action = "Create";
+
+    var empList = ViewBag.EmployeeList as SelectList;
+    bool committed = ViewBag.Committed;
+    DateTime todaysDate = ViewBag.Today;
+    DateTime tomorrowsDate = todaysDate.AddDays(1);
+    DateTime yesterdayDate = todaysDate.AddDays(-1);
+}
+<div class="row">
+    <div class="col-xs-12">
+        <!-- TABLE: LATEST ORDERS -->
+        <div class="box">
+            <div class="box-header">
+                <div class="col-xs-4">
+                    <button type="button" onclick="location.href='@Url.Action("Create","TimeSheet",new {date=yesterdayDate.ToString("dd.MM.yyyy") })'" class="btn btn-flat pull-right btn-bitbucket"><i class="fa fa-arrow-left"></i></button>
+
+                </div>
+                <div class="col-xs-4">
+                    <h3 class="box-title center-block" style="text-align:center;display:block;">
+                        <text>
+                            @todaysDate.ToString("dddd dd MMM, yyyy")
+                        </text>
+                    </h3>
+                </div>
+                <div class="col-xs-4">
+                    <button type="button" onclick="location.href='@Url.Action("Create","TimeSheet",new {date=tomorrowsDate.ToString("dd.MM.yyyy") })'" class="btn btn-flat pull-left btn-bitbucket"><i class="fa fa-arrow-right"></i></button>
+                </div>
+            </div>
+            <!-- /.box-header -->
+            <div class="box-body">
+                <table id="example1" class="table table-bordered table-striped">
+                    <thead>
+                        <tr>
+                            <th style="width:32%">Employee</th>
+                            <th style="width:32%">Time In</th>
+                            <th style="width:32%">Time Out</th>
+                            <th style="width:4%"></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @if (Model != null)
+                        {
+                            foreach (var item in Model)
+                            {
+                                <tr>
+                                    @if (committed)
+                                    {
+                                        <td>@(item.Employee.FirstName + " " + item.Employee.LastName)</td>
+                                        <td>@item.TimeIn.ToLongTimeString()</td>
+                                        <td>@item.TimeOut.ToLongTimeString()</td>
+                                        <td>
+                                            <button type="button"
+                                                    class="btn-flat btn-danger center-block disabled" disabled="disabled"
+                                                    style="width:30px;border-radius:15px;padding:0 0;height:30px;opacity:0.1">
+                                                <i class="fa fa-times" style="color:white"></i>
+                                            </button>
+                                        </td>
+                                    }
+                                    else
+                                    {
+                                        <td>@(item.Employee.FirstName + " " + item.Employee.LastName)</td>
+                                        <td>@item.TimeIn.ToLongTimeString()</td>
+                                        <td>@item.TimeOut.ToLongTimeString()</td>
+                                        <td>
+                                            @using (Html.BeginForm("DeleteItem", "TimeSheet", FormMethod.Post))
+                                        {
+                                        <input type="hidden" name="itemId" id="itemId" value="@item.Id" />
+                                        <input type="hidden" name="date" id="date" value="@item.TimeIn.ToString("dd.MM.yyyy")" />
+                                        <button type="submit"
+                                                class="btn-flat btn-danger center-block"
+                                                style="width:30px;border-radius:15px;padding:0 0;height:30px;">
+                                            <i class="fa fa-times" style="color:white"></i>
+                                        </button>
+                                        }
+                                        </td>
+                                    }
+                                </tr>
+                            }
+                        }
+                        @if (!committed)
+                        {
+                            <tr>
+                                @using (Html.BeginForm("AddItem", "TimeSheet", FormMethod.Post))
+                                {
+                                    <td>
+                                        <div class="input-group" style="width:100%">
+                                            @Html.DropDownList("EmployeeList", empList, new { @class = "form-control" })
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div class="bootstrap-timepicker">
+                                            <div class="input-group">
+                                                <input type="text" class="form-control timepicker" name="timeIn">
+
+                                                <div class="input-group-addon">
+                                                    <i class="fa fa-clock-o"></i>
+                                                </div>
+                                            </div>
+                                            <!-- /.input group -->
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div class="bootstrap-timepicker">
+                                            <div class="input-group">
+                                                <input type="text" class="form-control timepicker" name="timeOut">
+
+                                                <div class="input-group-addon">
+                                                    <i class="fa fa-clock-o"></i>
+                                                </div>
+                                            </div>
+                                            <!-- /.input group -->
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <input type="hidden" name="dateItem" value="@todaysDate.ToString("dd.MM.yyyy")" />
+                                        <button type="submit"
+                                                class="btn-flat btn-success center-block"
+                                                style="width:30px;border-radius:15px;padding:0 0;height:30px;">
+                                            <i class="fa fa-check" style="color:white"></i>
+                                        </button>
+                                    </td>
+                                }
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+                <!-- /.table-responsive -->
+            </div>
+            <!-- /.box-body -->
+            <div class="box-footer clearfix">
+                @if (!committed)
+                {
+                    using (Html.BeginForm("CommitDay", "TimeSheet", FormMethod.Post))
+                    {
+                        if (Model != null)
+                        {
+                            <input type="hidden" name="date" id="date" value="@todaysDate.ToString("dd.MM.yyyy")" />
+
+                        }
+                        <button type="submit" class="btn btn-flat btn-sm pull-left">Commit Day</button>
+                    }
+                }
+                @Html.ActionLink("View Current Month Summary", "MonthSummary", "TimeSheet", new { date = todaysDate.ToString("dd.MM.yyyy") }, new { @class= "btn btn-sm btn-default btn-flat pull-right" })
+            </div>
+            <!-- /.box-footer -->
+        </div>
+        <!-- /.box -->
+        </div>
+    </div>
+
+        @section Scripts {
+            @Scripts.Render("~/bundles/jqueryval")
+            <script src="~/Content/js/bootstrap-timepicker.min.js"></script>
+            <script src="~/Content/js/plugins/DataTables/jquery.dataTables.js"></script>
+            <script src="~/Content/js/plugins/DataTables/dataTables.bootstrap.js"></script>
+            <script>
+                $(function () {
+                    //Timepicker
+                    $(".timepicker").timepicker({
+                        showInputs: false
+                    });
+                });
+            </script>
+            <script>
+                $(function () {
+                    $('#example1').DataTable();
+                    $('#example2').DataTable({
+                        "paging": true,
+                        "lengthChange": false,
+                        "searching": false,
+                        "ordering": true,
+                        "info": true,
+                        "autoWidth": false
+                    });
+                });
+            </script>
+        }

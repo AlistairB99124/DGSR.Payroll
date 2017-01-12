@@ -1,0 +1,63 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 14
+VisualStudioVersion = 14.0.25420.1
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "0 - Payroll.UI", "0 - Payroll.UI", "{67242A5D-866D-44C8-ABF8-74D392B6BC27}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "1 - Payroll.Application", "1 - Payroll.Application", "{30D78D5D-AEF8-46B7-8114-E9C94D153AAB}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "2 - Payroll.Domain", "2 - Payroll.Domain", "{8B22169C-9E62-456C-88D2-DA32CEC16D30}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "3 - Payroll.Infrastructure", "3 - Payroll.Infrastructure", "{91CF7B6D-4C76-4CEF-B3B1-BE4C2951FE5A}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Payroll.Infrastructure.Data", "Payroll.Infrastructure.Data\Payroll.Infrastructure.Data.csproj", "{D651E3BA-A3BB-40D3-89C4-F92E371072FC}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Payroll.Infrastructure.IoC", "Payroll.Infrastructure.IoC\Payroll.Infrastructure.IoC.csproj", "{F7178DA1-68A3-4EB5-89DA-8BE14BDFD514}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Payroll.Domain", "Payroll.Domain\Payroll.Domain.csproj", "{9A4B2B2A-73F8-409C-B7E8-39F877A027AF}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Payroll.UI.Web", "Payroll.UI.Web\Payroll.UI.Web.csproj", "{AE163B07-36A3-478A-A545-CFB5100D9478}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "4 - UnitTests", "4 - UnitTests", "{D67CCA35-0F13-4871-AC36-6914D44E4AFA}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Payroll.UI.WPF", "Payroll.UI.WPF\Payroll.UI.WPF.csproj", "{ACF70E92-10CF-40F5-AAB7-82AD68EFCB6B}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{D651E3BA-A3BB-40D3-89C4-F92E371072FC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D651E3BA-A3BB-40D3-89C4-F92E371072FC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D651E3BA-A3BB-40D3-89C4-F92E371072FC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D651E3BA-A3BB-40D3-89C4-F92E371072FC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F7178DA1-68A3-4EB5-89DA-8BE14BDFD514}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F7178DA1-68A3-4EB5-89DA-8BE14BDFD514}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F7178DA1-68A3-4EB5-89DA-8BE14BDFD514}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F7178DA1-68A3-4EB5-89DA-8BE14BDFD514}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9A4B2B2A-73F8-409C-B7E8-39F877A027AF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9A4B2B2A-73F8-409C-B7E8-39F877A027AF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9A4B2B2A-73F8-409C-B7E8-39F877A027AF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9A4B2B2A-73F8-409C-B7E8-39F877A027AF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{AE163B07-36A3-478A-A545-CFB5100D9478}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AE163B07-36A3-478A-A545-CFB5100D9478}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AE163B07-36A3-478A-A545-CFB5100D9478}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AE163B07-36A3-478A-A545-CFB5100D9478}.Release|Any CPU.Build.0 = Release|Any CPU
+		{ACF70E92-10CF-40F5-AAB7-82AD68EFCB6B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{ACF70E92-10CF-40F5-AAB7-82AD68EFCB6B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{ACF70E92-10CF-40F5-AAB7-82AD68EFCB6B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{ACF70E92-10CF-40F5-AAB7-82AD68EFCB6B}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{D651E3BA-A3BB-40D3-89C4-F92E371072FC} = {91CF7B6D-4C76-4CEF-B3B1-BE4C2951FE5A}
+		{F7178DA1-68A3-4EB5-89DA-8BE14BDFD514} = {91CF7B6D-4C76-4CEF-B3B1-BE4C2951FE5A}
+		{9A4B2B2A-73F8-409C-B7E8-39F877A027AF} = {8B22169C-9E62-456C-88D2-DA32CEC16D30}
+		{AE163B07-36A3-478A-A545-CFB5100D9478} = {67242A5D-866D-44C8-ABF8-74D392B6BC27}
+		{ACF70E92-10CF-40F5-AAB7-82AD68EFCB6B} = {67242A5D-866D-44C8-ABF8-74D392B6BC27}
+	EndGlobalSection
+EndGlobal

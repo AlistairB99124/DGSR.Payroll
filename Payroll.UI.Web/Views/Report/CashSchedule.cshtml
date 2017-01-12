@@ -1,0 +1,86 @@
+﻿@using Payroll.UI.Web.Models
+@model IEnumerable<Payroll.UI.Web.Models.CashScheduleViewModel>
+@{
+    ViewBag.Title = "CashSchedule";
+    Totals totals = ViewBag.Totals;
+}
+<div class="row">
+    <div class="col-xs-12">
+        <div class="box">
+            <div class="box-header">
+            </div>
+            <!-- /.box-header -->
+            <div class="box-body">
+                <table id="example1" class="table table-bordered table-striped">
+                    <thead>
+                        <tr>
+                            <th>Emp Code</th>
+                            <th>Name</th>
+                            <th>Wage Due</th>
+                            <th>R100 Notes</th>
+                            <th>R50 Notes</th>
+                            <th>R20 Notes</th>
+                            <th>R10 Notes</th>
+                            <th>R5 Coins</th>
+                            <th>R2 Coins</th>
+                            <th>R1 Coins</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in Model)
+                        {
+                            <tr>
+                                <td>@item.EmpCode</td>
+                                <td>@item.Name</td>
+                                <td>@item.WageDue.ToString("C0")</td>
+                                <td>@item.OneHundredNote</td>
+                                <td>@item.FiftyNote</td>
+                                <td>@item.TwentyNote</td>
+                                <td>@item.TenNote</td>
+                                <td>@item.FiveCoin</td>
+                                <td>@item.TwoCoin</td>
+                                <td>@item.OneCoin</td>
+                            </tr>
+                        }                       
+                    </tbody>
+                    <tfoot>
+                        <tr>
+                            <th></th>
+                            <th></th>
+                            <th>@totals.Wages.ToString("C0")</th>
+                            <th>@totals.Hundreds.ToString("C0")</th>
+                            <th>@totals.Fifties.ToString("C0")</th>
+                            <th>@totals.Twenties.ToString("C0")</th>
+                            <th>@totals.Tens.ToString("C0")</th>
+                            <th>@totals.Fives.ToString("C0")</th>
+                            <th>@totals.Twos.ToString("C0")</th>
+                            <th>@totals.Ones.ToString("C0")</th>
+                        </tr>
+                        
+                    </tfoot>
+                </table>
+            </div>
+            <div class="box-footer">
+
+            </div>
+        </div>
+    </div>
+</div>
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+    <script src="~/Content/js/plugins/DataTables/jquery.dataTables.min.js"></script>
+    <script src="~/Content/js/plugins/DataTables/dataTables.bootstrap.min.js"></script>
+    <script type="text/javascript">
+        $(function () {
+            $("#example1").DataTable({
+                "paging": true,
+                "lengthChange": true,
+                "searching": true,
+                "ordering": true,
+                "info": true,
+                "autoWidth": false,
+                "scrollX":false
+            });
+        });
+    </script>
+}

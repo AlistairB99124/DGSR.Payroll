@@ -1,0 +1,72 @@
+﻿@using Payroll.UI.Web.Models
+@model List<TimeSheetSummaryModel>
+@{
+    ViewBag.Title = "MonthSummary";
+    ViewBag.ViewHeader = "Month Summary";
+    ViewBag.Description = "Hours";
+    ViewBag.Controller = "Time Sheet";
+    ViewBag.Action = "MonthSummary";
+    DateTime date = ViewBag.Date;
+}
+<div class="row">
+    <div class="col-xs-12">
+        <div class="box">
+            <div class="box-header">
+                <h3 class="box-title">@date.ToString("MMMM, yyyy")</h3>
+            </div>
+            <!-- /.box-header -->
+            <div class="box-body">
+                <table id="example1" class="table table-bordered table-striped">
+                    <thead>
+                        <tr>
+                            <th>Employee</th><th>Normal</th><th>Time x4/3</th><th>Time x3/2</th><th>Time x2</th><th>Time Effective</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in Model)
+                        {
+                            <tr>
+                                <td>@item.EmployeeName</td>
+                                <td>@item.NormalHours</td>
+                                <td>@item.TimeOneThirdHours</td>
+                                <td>@item.TimeOneHalfHours</td>
+                                <td>@item.DoubleTimeHours</td>
+                                <td>@item.EffectiveHours</td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+            <div class="box-footer">
+                @using (Html.BeginForm("CommitToPayroll", "Payroll", FormMethod.Post))
+                {
+                    <input type="hidden" name="date" id="date" value="@date.ToString("dd.MM.yyyy")" />
+                    <input type="submit" value="Commit to Payroll" class="btn btn-sm btn-default btn-flat pull-left" />
+                }
+                @using (Html.BeginForm("ExportHoursToExcel", "TimeSheet", FormMethod.Post))
+                {
+                    <input type="hidden" name="date" id="date" value="@date.ToString("dd.MM.yyyy")"/>
+                    <input type="submit" value="Download to Excel" class="btn btn-sm btn-default btn-flat pull-right"/>
+                }                
+            </div>
+        </div>
+    </div>
+</div>
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+    <script src="~/Content/js/plugins/DataTables/jquery.dataTables.js"></script>
+    <script src="~/Content/js/plugins/DataTables/dataTables.bootstrap.js"></script>
+    <script>
+        $(function () {
+            $('#example1').DataTable();
+            $('#example2').DataTable({
+                "paging": true,
+                "lengthChange": false,
+                "searching": false,
+                "ordering": true,
+                "info": true,
+                "autoWidth": false
+            });
+        });
+    </script>
+}

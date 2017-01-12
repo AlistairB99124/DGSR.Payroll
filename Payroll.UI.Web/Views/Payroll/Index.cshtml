@@ -1,0 +1,125 @@
+﻿@using Payroll.Domain
+@model List<Payroll.Domain.Entities.PayrollItem>
+@{
+    DateTime date = ViewBag.Date;
+    ViewBag.Title = date.ToString("MMM, yy") + " Payroll";
+    ViewBag.ViewHeader = "Payroll";
+    ViewBag.Description = date.ToString("MMMM, yyyy");
+    ViewBag.Controller = "Payroll";
+    ViewBag.Action = "Index";
+}
+<div class="row">
+    <div class="col-xs-12">
+        <div class="box">
+            <div class="box-header">
+            </div>
+            <!-- /.box-header -->
+            <div class="box-body">
+                <table id="example1" class="table table-bordered table-striped">
+                    <thead>
+                        <tr>
+                            <th>Emp ID</th>
+                            <th>Full Name</th>
+                            <th>Normal</th>
+                            <th>Overtime (x1.33)</th>
+                            <th>Overtime (x1.5)</th>
+                            <th>Overtime (x2)</th>
+                            <th>Time Effective</th>
+                            <th>Rate</th>
+                            <th>Amount (Gross)</th>
+                            <th>Amount (Taxable)</th>
+                            <th>Bonus</th>
+                            <th>Gross Wages</th>
+                            <th>G / Tax</th>
+                            <th>PAYE</th>
+                            <th>SNPF (Employee)</th>
+                            <th>SNPF (Employer)</th>
+                            <th>Amount (Net)</th>
+                            <th>Loan</th>
+                            <th>Advance</th>
+                            <th>Amount Paid</th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in Model)
+                        {
+                            var contract = item.Employee.Contracts.Where(p => p.ExpiryDate > DateTime.Now).FirstOrDefault();
+                            <tr>
+                                @using (Html.BeginForm("UpdatePayroll", "PayrollItem", FormMethod.Post))
+                                {                                    
+                                    <td>@item.Employee.EmpId</td>
+                                    <td>@(item.Employee.LastName + ", " + item.Employee.FirstName)</td>
+                                    if (contract.Salaried)
+                                    {
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                        <td>@contract.Salary.ToString("C2")</td>
+                                    }
+                                    else
+                                    {
+                                        <td>@item.NormalHours.ToString("F2")</td>
+                                        <td>@item.TimeOneThirdHours.ToString("F2")</td>
+                                        <td>@item.TimeOneHalfHours.ToString("F2")</td>
+                                        <td>@item.DoubleTimeHours.ToString("F2")</td>
+                                        <td>@item.EffectiveHours.ToString("F2")</td>
+                                        <td>@contract.Wage.ToString("C2")</td>
+                                    }
+                                    <td>@item.AmountGross.ToString("C2")</td>
+                                    <td>@item.AmountTaxable.ToString("C2")</td>
+                                    <td>
+                                        <span style="white-space:nowrap"><label>R</label><input type="number" step="0.5" value="@item.Bonus.ToString("F2").Replace(',','.')" name="bonusVal" id="bonusVal" class="form-control" style="width:100px;margin-left:5px;" /></span>
+                                    </td>
+                                    <td>@item.Gross_Wage.ToString("C2")</td>
+                                    <td>@item.General_Tax.ToString("C2")</td>
+                                    <td>@item.PAYE.ToString("C2")</td>
+                                    <td>@item.SNPF_Employee.ToString("C2")</td>
+                                    <td>@item.SNPF_Employer.ToString("C2")</td>
+                                    <td>@item.Amount_Net.ToString("C2")</td>
+                                    <td>
+                                        <span style="white-space:nowrap"><label>R</label><input type="number" step="0.5" value="@item.Loan.ToString("F2").Replace(',','.')" name="loanVal" id="loanVal" class="form-control" style="width:100px;margin-left:5px;" /></span></td>
+                                    <td>
+                                        <input type="hidden" value="@item.Id" name="payrollVal" id="payrollVal"/>
+                                       <span style="white-space:nowrap"><label>R</label><input type="number" step="0.5" value="@item.Advance.ToString("F2").Replace(',','.')" name="advanceVal" id="advanceVal" class="form-control" style="width:100px;margin-left:5px;" /></span> 
+                                    </td>
+                                    <td>@item.Amount_Paid.ToString("C2")</td>
+                                    <td>
+                                        <button type="submit" value="Update" class="btn-flat btn-success" style="width:30px;height:24px;border-radius:12px;"><i class="fa fa-check"></i></button>
+                                    </td>
+                                }                                
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+            <div class="box-footer">
+               @using (Html.BeginForm("ExportPayrollToExcel", "Payroll", FormMethod.Post))
+               {
+                   <input type="hidden" value="@Model.FirstOrDefault().PayrollId" name="payrollId"/>
+                   <button type="submit" class="btn btn-flat btn-success"><i class="fa fa-file-excel-o"></i></button>
+               }
+            </div>
+        </div>
+    </div>
+</div>
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+<script src="~/Content/js/plugins/DataTables/jquery.dataTables.min.js"></script>
+<script src="~/Content/js/plugins/DataTables/dataTables.bootstrap.min.js"></script> 
+    <script>
+        $(function () {
+            $('#example1').DataTable({
+                "scrollX": true,
+                "paging": true,
+                "lengthChange": true,
+                "searching": true,
+                "ordering": true,
+                "info": true,
+                "autoWidth": true
+            });
+        });
+    </script>
+}

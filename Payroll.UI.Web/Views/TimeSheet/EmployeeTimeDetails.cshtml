@@ -1,0 +1,77 @@
+﻿@using Payroll.Domain.Entities
+@model TimeSheetItem
+
+@{
+    DateTime date = ViewBag.Date;
+    Employee employee = ViewBag.Employee;
+    ViewBag.Title = "Employee Time Details";
+    ViewBag.ViewHeader = employee.FullName + ": Time Sheets";
+    ViewBag.Description = date.ToString("ddd MMMM, yyyy");
+    ViewBag.Controller = "Time Sheet";
+    ViewBag.Action = "Employee Time Details";
+}
+<style>
+    .example-modal .modal {
+        position: relative;
+        top: auto;
+        bottom: auto;
+        right: auto;
+        left: auto;
+        display: block;
+        z-index: 1;
+    }
+
+    .example-modal .modal {
+        background: transparent !important;
+    }
+</style>
+<div class="example-modal">
+    <div class="modal">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title">@employee.FullName</h4>
+                </div>
+                <div class="modal-body">
+                    <table class="table table-bordered table-striped">
+                        <thead>
+                            <tr>
+                                <th colspan="2">Day Summary</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <th>Time In</th>
+                                <td>@Model.TimeIn.ToShortTimeString()</td>
+                            </tr>
+                            <tr>
+                                <th>Time Out</th>
+                                <td>@Model.TimeIn.ToShortTimeString()</td>
+                            </tr>
+                            <tr>
+                                @{TimeSpan span = Model.TimeOut.Subtract(Model.TimeIn); }
+                                <th>Duration</th>
+                                <td>@span.TotalHours</td>
+                            </tr>                               
+                             
+                        </tbody>
+                        <tfoot>
+
+                        </tfoot>
+                    </table>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default pull-left" data-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary">Save changes</button>
+                </div>
+            </div>
+            <!-- /.modal-content -->
+        </div>
+        <!-- /.modal-dialog -->
+    </div>
+    <!-- /.modal -->
+</div>
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+}

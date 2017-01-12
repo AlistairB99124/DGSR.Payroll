@@ -1,0 +1,58 @@
+﻿@using System.Web.Optimization
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>
+        @if (!string.IsNullOrWhiteSpace(ViewBag.Title)) {
+            @ViewBag.Title@: -
+        }
+        DGSR Payroll
+    </title>
+    <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
+    <link href="~/Content/css/font-awesome.min.css" rel="stylesheet">
+    <link href="~/Content/css/icheck/blue.min.css" rel="stylesheet">
+
+    <link href="~/Content/css/Plugins/DataTables/dataTables.bootstrap.css" rel="stylesheet" />
+    <link href="~/Content/css/Plugins/Datepicker/bootstrap-timepicker.min.css" rel="stylesheet" />
+    <link href="~/Content/css/Plugins/Datepicker/datepicker3.css" rel="stylesheet" />
+    <link href="~/Content/css/Plugins/Datepicker/Daterangepicker.css" rel="stylesheet" />
+    <link href="~/Content/css/Plugins/bootstrap-wysihtml5/bootstrap-wysihtml5.min.css" rel="stylesheet" />
+    @Styles.Render("~/Content/css")
+    @Scripts.Render("~/bundles/modernizr")
+</head>
+<body class="hold-transition skin-blue sidebar-mini">
+    <div class="wrapper">
+        @Html.Partial("_Header")
+        @Html.Partial("_Sidebar")
+        <div class="content-wrapper">
+            <section class="content-header">
+                <h1>
+                    @ViewBag.ViewHeader
+                    <small>@ViewBag.Description</small>
+                </h1>
+                <ol class="breadcrumb">
+                    <li>
+                        <a href="#">
+                            <i class="fa fa-dashboard"> Home</i>                            
+                        </a>
+                    </li>
+                    <li><a href="#">@ViewBag.Controller</a></li>
+                    <li class="active">@ViewBag.Action</li>
+                </ol>
+            </section>
+
+            <section class="content">
+                @RenderBody()
+            </section>
+        </div>
+
+        @Html.Partial("_ControlSidebar")
+    </div>
+    <script src="@RouteJs.RouteJsHandler.HandlerUrl"></script>
+    @Scripts.Render("~/bundles/jquery")
+    @Scripts.Render("~/bundles/bootstrap")
+    @RenderSection("scripts", required: false)
+</body>
+</html>

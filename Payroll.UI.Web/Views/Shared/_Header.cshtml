@@ -1,0 +1,123 @@
+﻿@using Microsoft.AspNet.Identity
+@using Payroll.Infrastructure.Data.Context
+@using (Html.BeginForm("LogOff", "Account", FormMethod.Post, new { id = "logoutForm" }))
+{
+<header class="main-header">
+    @* BEGIN Logo *@
+    <a href="@Url.Action("Index", "Home")" class="logo">
+        <!-- mini logo for sidebar mini 50x50 pixels -->
+        <span class="logo-mini"><b>DGSR</b></span>
+        <!-- logo for regular state and mobile devices -->
+        <span class="logo-lg"><b>DGSR</b>Payroll</span>
+    </a>
+    @Html.AntiForgeryToken()
+    @* END Logo *@
+    @* BEGIN Header *@
+    <nav class="navbar navbar-static-top" role="navigation">
+        <a href="#" class="sidebar-toggle" data-toggle="offcanvas" role="button">
+            <span class="sr-only">Toggle navigation</span>
+        </a>
+        <div class="navbar-custom-menu">
+            <ul class="nav navbar-nav">               
+                @* BEGIN User Account Menu *@
+                @if (Request.IsAuthenticated)
+                {
+                    var userId = HttpContext.Current.User.Identity.GetUserId();
+                    var db = new ContextBank();
+                    var user = db.Users.Find(userId);
+                    var clerk = db.Clerks.Where(p => p.UserId == user.Id).FirstOrDefault();
+                    var admin = db.Admins.Where(p => p.UserId == userId).FirstOrDefault();
+                    
+                        <li class="dropdown user user-menu">
+                            <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                                @if (user.ImageData == null)
+                                {
+                                    <img src="~/Content/img/myuser.jpg" class="user-image" alt="user-img" />
+                                }
+                                else
+                                {
+                                    <img src="@user.ImageUrl.Replace("~/","../../")" class="user-image" alt="user-img" />
+                                }
+                                <span class="hidden-xs">@(user.FirstName + " " + user.LastName)</span>
+                            </a>
+                            <ul class="dropdown-menu">
+                                <li class="user-header">
+                                    @if (user.ImageData == null)
+                                    {
+                                        <img src="~/Content/img/myuser.jpg" class="img-circle" alt="user-img"  />
+                                    }
+                                    else
+                                    {
+                                        <img src="@user.ImageUrl.Replace("~/","../../")" class="img-circle" alt="user-img" />
+                                    }
+                                    <p>
+                                        @if (clerk == null)
+                                        {
+                                            @(user.FirstName + " " + user.LastName + " - Administrator")
+                                        }
+                                        else
+                                        {
+                                            @(user.FirstName + " " + user.LastName + " - Clerk")
+                                        }
+                                        <small>Member since @user.DateRegistered.ToString("MMM, yyyy")</small>
+                                    </p>
+                                </li>
+                                <li class="user-body">
+                                    <div class="row">
+                                        <div class="col-xs-4 text-center">
+                                            <a href="#">Followers</a>
+                                        </div>
+                                        <div class="col-xs-4 text-center">
+                                            <a href="#">Sales</a>
+                                        </div>
+                                        <div class="col-xs-4 text-center">
+                                            <a href="#">Friends</a>
+                                        </div>
+                                    </div>
+                                </li>
+                                <li class="user-footer">
+                                    <div class="pull-left">
+                                        @Html.ActionLink("Profile", "Index", "Manage", null, new { @class = "btn btn-default btn-flat" })
+                                    </div>
+                                    <div class="pull-right">
+                                        <a href="javascript:document.getElementById('logoutForm').submit()" class="btn btn-default btn-flat">Sign Out</a>
+                                    </div>
+                                </li>
+                            </ul>
+                        </li>                    
+                }
+                else
+                {
+                    <li class="dropdown user user-menu">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                            <span class="fa fa-sign-in"></span><span class="hidden-xs"> Sign In</span>
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li class="user-header">
+                                <span class="fa fa-5x fa-sign-in" style="color:#fff;"></span>
+                                <p>
+                                    Sign up or Sign In To WeFix
+                                </p>
+                            </li>
+                            <li class="user-footer">
+                                <div class="pull-left">
+                                    @Html.ActionLink("Sign Up", "Register", "Account", routeValues: null, htmlAttributes: new { id = "registerLink", @class = "btn btn-default btn-flat" })
+                                </div>
+                                <div class="pull-right">
+                                    @Html.ActionLink("Sign in", "Login", "Account", routeValues: null, htmlAttributes: new { id = "loginLink", @class = "btn btn-default btn-flat" })
+                                </div>
+                            </li>
+                        </ul>
+                    </li>
+                }                
+                @* END User Account Menu *@
+                @* BEGIN Control Sidebar Toggle Button *@
+                <li>
+                    <a href="#" data-toggle="control-sidebar"><i class="fa fa-gears"></i></a>
+                </li>
+                @* END Control Sidebar Toggle Button *@
+            </ul>
+        </div>
+    </nav>
+</header>
+}

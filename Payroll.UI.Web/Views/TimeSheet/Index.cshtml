@@ -1,0 +1,137 @@
+﻿@model List<Payroll.Domain.Entities.Employee>
+    @using System.Text
+@using System.Data.Entity
+@using Payroll.Infrastructure.Data.Context
+@{
+    var db = new ContextBank();
+    DateTime date = ViewBag.Date;
+    DateTime nextMonth = date.AddMonths(1);
+    DateTime lastMonth = date.AddMonths(-1);
+    ViewBag.Title = date.ToString("MMM, yy") + " Payroll";
+    ViewBag.ViewHeader = "Payroll";
+    ViewBag.Description = date.ToString("MMMM, yyyy");
+    ViewBag.Controller = "Payroll";
+    ViewBag.Action = "Index";
+
+    List<DateTime> Dates = Enumerable.Range(1, DateTime.DaysInMonth(date.Year, date.Month))
+                                       .Select(day => new DateTime(date.Year, date.Month, day))
+                                       .ToList();
+}
+<div class="row">
+    <div class="col-xs-12">
+        <div class="box">
+            <div class="box-header">
+                <div class="col-xs-4">
+                    <button type="button" onclick="location.href='@Url.Action("Index","TimeSheet",new {date=lastMonth.ToString("dd.MM.yyyy") })'" class="btn btn-flat pull-right btn-bitbucket"><i class="fa fa-arrow-left"></i></button>
+                </div>
+                <div class="col-xs-4">
+                    <h3 class="box-title center-block" style="text-align:center;display:block;">
+                        <text>
+                            @date.ToString("MMM, yyyy")
+                        </text>
+                    </h3>
+                </div>
+                <div class="col-xs-4">
+                    <button type="button" onclick="location.href='@Url.Action("Index","TimeSheet",new {date=nextMonth.ToString("dd.MM.yyyy") })'" class="btn btn-flat pull-left btn-bitbucket"><i class="fa fa-arrow-right"></i></button>
+                </div>
+            </div>
+            <!-- /.box-header -->
+            <div class="box-body">
+                <table id="example1" class="table table-bordered table-striped">
+                    <thead>
+                        <tr>
+                            <td colspan="2"><label>Day of Month</label> <i class="fa fa-arrow-right"></i></td>
+                            @foreach (var ds in Dates)
+                            {
+                                <td colspan="2">
+                                    <button onclick="location.href='@Url.Action("Create","TimeSheet",new {date=ds.ToString("dd.MM.yyyy") })'" type="button" class="btn btn-flat btn-bitbucket" style="width:100%;">@ds.Day</button>
+                                </td>
+                            }                            
+                        </tr>
+                        <tr>
+                            <th>Emp ID</th>
+                            <th>Name</th>
+                            @foreach(var de in Dates)
+                            {
+                                <th>Time In</th>
+                                <th>Time Out</th>
+                            }
+                          </tr>
+                    </thead>
+                    <tbody>
+                        @{ int counter = 1;}
+                        @foreach (var e in Model)
+                        {
+                            if (counter == 1)
+                            {
+                                <tr>
+                                    <td><button onclick="location.href='@Url.Action("EmployeeDetails","TimeSheet",new {ID=e.Id, Date=date.ToString("dd.MM.yyyy") })'" class="btn btn-flat btn-default">@(e.EmpId)</button></td>
+                                    <td>@(e.LastName + ", " + e.FirstName)</td>
+                                    @foreach (var d in Dates)
+                                    {
+                                        var timesheet = db.TimeSheetItems.Where(x => DbFunctions.TruncateTime(x.TimeIn) == DbFunctions.TruncateTime(d) && x.EmployeeId == e.Id).FirstOrDefault();
+                                        if (timesheet == null)
+                                        {
+                                            <td></td>
+                                            <td></td>
+                                        }
+                                        else
+                                        {
+                                            <td><button onclick="location.href='@Url.Action("EmployeeTimeDetails","TimeSheet",new {empId=e.Id,timeId=timesheet.TimeSheetId })'" class="btn btn-flat btn-default">@timesheet.TimeIn.ToString("HH:mm")</button></td>
+                                            <td><button onclick="location.href='@Url.Action("EmployeeTimeDetails","TimeSheet",new {empId=e.Id,timeId=timesheet.TimeSheetId })'" class="btn btn-flat btn-default">@timesheet.TimeOut.ToString("HH:mm")</button></td>
+                                        }
+                                    }
+                                </tr>
+                            }
+                            else
+                            {
+                                <tr>
+                                    <td><button onclick="location.href='@Url.Action("EmployeeDetails","TimeSheet",new {empId=e.Id, date=date.ToString("dd.MM.yyyy") })'" class="btn btn-flat btn-default">@(e.EmpId)</button></td>
+                                    <td>@(e.LastName + ", " + e.FirstName)</td>
+                                    @foreach (var d in Dates)
+                                    {
+                                        var timesheet = db.TimeSheetItems.Where(x => DbFunctions.TruncateTime(x.TimeIn) == DbFunctions.TruncateTime(d)&&x.EmployeeId==e.Id).FirstOrDefault();
+                                        if (timesheet == null)
+                                        {
+                                            <td></td>
+                                            <td></td>
+                                        }
+                                        else
+                                        {
+                                            <td><button onclick="location.href='@Url.Action("EmployeeTimeDetails","TimeSheet",new {empId=e.Id,timeId=timesheet.TimeSheetId })'" class="btn btn-flat btn-default">@timesheet.TimeIn.ToString("HH:mm")</button></td>
+                                            <td><button onclick="location.href='@Url.Action("EmployeeTimeDetails","TimeSheet",new {empId=e.Id,timeId=timesheet.TimeSheetId })'" class="btn btn-flat btn-default">@timesheet.TimeOut.ToString("HH:mm")</button></td>
+                                        }
+                                    }
+                                </tr>
+                            }
+                            ++counter;
+                        }                        
+                    </tbody>                   
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+<script src="~/Content/js/plugins/DataTables/jquery.dataTables.min.js"></script>
+    <script src="~/Content/js/plugins/DataTables/dataTables.bootstrap.min.js"></script>    
+    <script type="text/javascript">
+        $(function () {
+            $("#example1").DataTable({
+                "paging": true,
+                "lengthChange": true,
+                "lengthMenu": [[5, 10, 20, -1], [5, 10, 20, "All"]],
+                "searching": true,
+                "ordering": true,
+                "info": true,
+                "autoWidth": true,
+                "scrollX":true,
+                "columnDefs" : [
+                { width: 60, targets: 0 },
+                {width: 200, targets:1 }
+                ]
+            });
+        });
+    </script>
+}
